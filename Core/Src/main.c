@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "app_threadx.h"
 #include "main.h"
+#include "dma.h"
 #include "spi.h"
 #include "usart.h"
 #include "gpio.h"
@@ -110,11 +111,11 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_UART4_Init();
   MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
-    /* 	使用ThreadX, 不如直接用TraceX
-     *	但暂时未配置好, 后续再改
+    /* 	Note: 使用ThreadX, 不如直接用TraceX, 但暂时未配置好, 后续再改
      *	此外, 也可以考虑购买一下 H7-Tool, 起码不用添加代码
      */
 #ifdef EventRecorder_ENABLE

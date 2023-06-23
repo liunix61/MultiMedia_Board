@@ -146,11 +146,6 @@ extern "C" {
 #define ILI9488_POINT_COLOR_GRAY187         (0x00BDD7UL)
 #define ILI9488_POINT_COLOR_GRAY240       	(0x00F79EUL)
 
-#define ILI9488_WIDTH						(480U)
-#define ILI9488_HEIGHT						(320U)
-#define ILI9488_BITS_PER_PIXEL				(18U)	// RGB666
-#define ILI9488_BUF_SIZE					(ILI9488_WIDTH * ILI9488_HEIGHT * ILI9488_BITS_PER_PIXEL / 8)
-
 #define ili9488_delay(ms)			tx_thread_sleep(ms)
 
 

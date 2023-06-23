@@ -4,6 +4,7 @@
 ".\multimedia_board\output\tx_initialize_low_level.o"
 ".\multimedia_board\output\gpio.o"
 ".\multimedia_board\output\app_threadx.o"
+".\multimedia_board\output\dma.o"
 ".\multimedia_board\output\spi.o"
 ".\multimedia_board\output\usart.o"
 ".\multimedia_board\output\stm32h7xx_it.o"

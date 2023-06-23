@@ -97,14 +97,12 @@ void tx_app_thread_entry(ULONG thread_input)
 {
   /* USER CODE BEGIN tx_app_thread_entry */
     ili9488_init();
-	ili9488_exit_sleep();
-	ili9488_fill(20, 100, 40, 300, ILI9488_POINT_COLOR_RED);
+    ili9488_exit_sleep();
+    ili9488_fill(20, 100, 40, 300, ILI9488_POINT_COLOR_RED);
     while(1)
     {
-        tx_thread_sleep(1000);    
+        tx_thread_sleep(1000);
         LED_B_TOGGLE();
-
-//        printf("Looping.\r\n");
     }
   /* USER CODE END tx_app_thread_entry */
 }

@@ -35,7 +35,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define	SPI_TX_LOCK_NAME	"spi_tx"
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -45,6 +45,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 TX_THREAD tx_app_thread;
+TX_SEMAPHORE tx_app_semaphore;
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -61,32 +62,38 @@ TX_THREAD tx_app_thread;
   */
 UINT App_ThreadX_Init(VOID *memory_ptr)
 {
-    UINT ret = TX_SUCCESS;
-    TX_BYTE_POOL *byte_pool = (TX_BYTE_POOL*)memory_ptr;
-    /* USER CODE BEGIN App_ThreadX_MEM_POOL */
+  UINT ret = TX_SUCCESS;
+  TX_BYTE_POOL *byte_pool = (TX_BYTE_POOL*)memory_ptr;
+  /* USER CODE BEGIN App_ThreadX_MEM_POOL */
 
-    /* USER CODE END App_ThreadX_MEM_POOL */
-    CHAR *pointer;
+  /* USER CODE END App_ThreadX_MEM_POOL */
+  CHAR *pointer;
 
-    /* Allocate the stack for tx app thread  */
-    if (tx_byte_allocate(byte_pool, (VOID**) &pointer,
-                         TX_APP_STACK_SIZE, TX_NO_WAIT) != TX_SUCCESS)
-    {
-        return TX_POOL_ERROR;
-    }
-    /* Create tx app thread.  */
-    if (tx_thread_create(&tx_app_thread, "tx app thread", tx_app_thread_entry, 0, pointer,
-                         TX_APP_STACK_SIZE, TX_APP_THREAD_PRIO, TX_APP_THREAD_PREEMPTION_THRESHOLD,
-                         TX_APP_THREAD_TIME_SLICE, TX_APP_THREAD_AUTO_START) != TX_SUCCESS)
-    {
-        return TX_THREAD_ERROR;
-    }
+  /* Allocate the stack for tx app thread  */
+  if (tx_byte_allocate(byte_pool, (VOID**) &pointer,
+                       TX_APP_STACK_SIZE, TX_NO_WAIT) != TX_SUCCESS)
+  {
+    return TX_POOL_ERROR;
+  }
+  /* Create tx app thread.  */
+  if (tx_thread_create(&tx_app_thread, "tx app thread", tx_app_thread_entry, 0, pointer,
+                       TX_APP_STACK_SIZE, TX_APP_THREAD_PRIO, TX_APP_THREAD_PREEMPTION_THRESHOLD,
+                       TX_APP_THREAD_TIME_SLICE, TX_APP_THREAD_AUTO_START) != TX_SUCCESS)
+  {
+    return TX_THREAD_ERROR;
+  }
 
-    /* USER CODE BEGIN App_ThreadX_Init */
+  /* Create spi tx.  */
+  if (tx_semaphore_create(&tx_app_semaphore, "spi tx", 0) != TX_SUCCESS)
+  {
+    return TX_SEMAPHORE_ERROR;
+  }
 
-    /* USER CODE END App_ThreadX_Init */
+  /* USER CODE BEGIN App_ThreadX_Init */
 
-    return ret;
+  /* USER CODE END App_ThreadX_Init */
+
+  return ret;
 }
 /**
   * @brief  Function implementing the tx_app_thread_entry thread.
@@ -95,34 +102,35 @@ UINT App_ThreadX_Init(VOID *memory_ptr)
   */
 void tx_app_thread_entry(ULONG thread_input)
 {
-    /* USER CODE BEGIN tx_app_thread_entry */
+  /* USER CODE BEGIN tx_app_thread_entry */
     ili9488_init();
     ili9488_exit_sleep();
-    ili9488_fill(20, 100, 40, 300, ILI9488_POINT_COLOR_RED);
+    ili9488_fill(0, 0, 40, 30, ILI9488_POINT_COLOR_BLUE);
     while(1)
     {
         tx_thread_sleep(1000);
         LED_B_TOGGLE();
+		printf("Looping\r\n");
     }
-    /* USER CODE END tx_app_thread_entry */
+  /* USER CODE END tx_app_thread_entry */
 }
 
-/**
-* @brief  Function that implements the kernel's initialization.
-* @param  None
-* @retval None
-*/
+  /**
+  * @brief  Function that implements the kernel's initialization.
+  * @param  None
+  * @retval None
+  */
 void MX_ThreadX_Init(void)
 {
-    /* USER CODE BEGIN  Before_Kernel_Start */
+  /* USER CODE BEGIN  Before_Kernel_Start */
 
-    /* USER CODE END  Before_Kernel_Start */
+  /* USER CODE END  Before_Kernel_Start */
 
-    tx_kernel_enter();
+  tx_kernel_enter();
 
-    /* USER CODE BEGIN  Kernel_Start_Error */
+  /* USER CODE BEGIN  Kernel_Start_Error */
 
-    /* USER CODE END  Kernel_Start_Error */
+  /* USER CODE END  Kernel_Start_Error */
 }
 
 /* USER CODE BEGIN 1 */

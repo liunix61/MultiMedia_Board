@@ -112,7 +112,7 @@
 /*#define TX_TIMER_THREAD_STACK_SIZE                1024*/
 /*#define TX_TIMER_THREAD_PRIORITY                0*/
 
-#define TX_MINIMUM_STACK                256
+#define TX_MINIMUM_STACK                1024
 
 /* Determine if timer expirations (application timers, timeouts, and tx_thread_sleep calls
    should be processed within the a system timer thread or directly in the timer ISR.
@@ -141,7 +141,7 @@
    define is negated, thereby forcing the stack fill which is necessary for the stack checking
    logic.  */
 
-/*#define TX_ENABLE_STACK_CHECKING*/
+#define TX_ENABLE_STACK_CHECKING
 
 /* Determine if preemption-threshold should be disabled. By default, preemption-threshold is
    enabled. If the application does not use preemption-threshold, it may be disabled to reduce
